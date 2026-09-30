@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>HAVING FUN BIG B❤️Y?</title>
+<meta name="description" content="HAVING FUN BIG B❤️Y?">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="GRAB HIS SEAL AND TWIST IT">
+<meta property="og:title" content="GRAB HIS SEAL AND TWIST IT">
+<meta property="og:description" content="HAVING FUN BIG B❤️Y?">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GRAB HIS SEAL AND TWIST IT">
+<meta name="twitter:description" content="HAVING FUN BIG B❤️Y?">
+<style>
+:root{--bg:#f4f1ea;--fg:#222;--bar:#d8d2c4;--zone:#2e9e4f;--cur:#222;--card:#fff;--bad:#c0392b;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16171a;--fg:#eee;--bar:#33353b;--zone:#3ec06a;--cur:#fff;--card:#202227;--bad:#e5604f}}
+:root[data-theme="dark"]{--bg:#16171a;--fg:#eee;--bar:#33353b;--zone:#3ec06a;--cur:#fff;--card:#202227;--bad:#e5604f}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:system-ui,-apple-system,"Segoe UI",sans-serif;display:flex;justify-content:center}
+main{width:100%;max-width:640px;padding:20px;box-sizing:border-box;text-align:center}
+h1{margin:8px 0 4px}
+#bar{position:relative;height:56px;background:var(--bar);border-radius:8px;margin:28px 0 12px;overflow:hidden;cursor:pointer;touch-action:manipulation;user-select:none}
+#zone{position:absolute;top:0;bottom:0;background:var(--zone)}
+#cur{position:absolute;top:0;bottom:0;width:4px;background:var(--cur);left:0}
+#msg{height:28px;font-weight:600}
+#msg.fade{animation:fade 1s ease-out forwards}
+@keyframes fade{from{opacity:1}to{opacity:0}}
+#twist{font:inherit;font-size:1.2em;font-weight:700;padding:12px 48px;border:0;border-radius:10px;background:var(--zone);color:#fff;cursor:pointer;touch-action:manipulation;user-select:none;margin:4px 0 8px}
+#twist:active{transform:scale(.96)}
+#bar.hit{animation:hit .25s ease-out;box-shadow:0 0 18px var(--zone)}
+#bar.miss{animation:miss .35s ease-out;box-shadow:0 0 18px var(--bad)}
+@keyframes hit{0%{transform:scale(1)}30%{transform:scale(1.04) translateY(-3px)}100%{transform:scale(1)}}
+@keyframes miss{0%,100%{transform:translateX(0)}15%{transform:translateX(-12px)}35%{transform:translateX(10px)}55%{transform:translateX(-8px)}75%{transform:translateX(5px)}}
+.stats{display:flex;justify-content:space-around;margin:12px 0}
+.stats b{display:block;font-size:1.6em}
+label{font-size:.9em}
+input[type=number]{width:60px;font:inherit;padding:4px}
+small{opacity:.7}
+[hidden]{display:none!important}
+#card{position:fixed;inset:0;z-index:10;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));box-sizing:border-box}
+.dlg{background:var(--card);color:var(--fg);border-radius:14px;padding:24px;max-width:520px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.dlg h2{margin:0 0 16px}
+.pick{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.pick button{flex:1 1 220px;font:inherit;padding:18px 14px;border:2px solid var(--fg);background:var(--card);color:var(--fg);border-radius:10px;cursor:pointer}
+.pick button:hover{background:var(--fg);color:var(--bg)}
+.pick b{display:block;font-size:1.2em;margin-bottom:6px}
+</style>
+</head>
+<body>
+<main>
+  <h1>Seal Twisting Simulator</h1>
+  <div id="card" role="dialog" aria-modal="true" aria-labelledby="cardt" hidden>
+   <div class="dlg">
+    <h2 id="cardt">Game over</h2>
+    <p id="cwhy" style="margin:0 0 12px;color:var(--bad);font-weight:600"></p>
+    <div class="stats">
+      <div><b id="cscore">0</b>Score</div>
+      <div><b id="cbest">0</b>Best</div>
+    </div>
+    <p id="cnote" style="margin:0 0 16px;font-weight:600;color:var(--zone);min-height:1.2em"></p>
+    <div class="pick">
+      <button id="again"><b>Play again</b></button>
+    </div>
+   </div>
+  </div>
+  <div id="game">
+  <div id="bar"><div id="zone"></div><div id="cur"></div></div>
+  <button id="twist">Twist</button>
+  <div id="msg">Click to start</div>
+  <div class="stats">
+    <div><b id="hits">0</b>Score</div>
+    <div><b id="best">0</b>Best</div>
+  </div>
+  </div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let running=false, t0=0, dur=3, zs=0, zw=0, hits=0, streak=0, best=0;
+
+function setZone(){
+  zw=0.4/dur; zs=1-zw;                           // last 0.4s of the bar
+  $('zone').style.left=zs*100+'%'; $('zone').style.width=zw*100+'%';
+}
+let resolved=false;
+function round(){ dur=3; setZone(); t0=performance.now(); running=true; resolved=false; }
+function shake(kind){
+  const b=$('bar'); b.classList.remove('hit','miss'); void b.offsetWidth; b.classList.add(kind);
+}
+$('bar').addEventListener('animationend',()=>$('bar').classList.remove('hit','miss'));
+function hit(){
+  resolved=true; hits++;
+  $('hits').textContent=hits;
+  const m=$('msg'); m.textContent='WOW SO FUN!'; m.style.color='var(--zone)';
+  m.classList.remove('fade'); void m.offsetWidth; m.classList.add('fade');   // fade out over 1s
+  shake('hit');
+}
+function miss(text){
+  running=false; resolved=true;
+  $('msg').classList.remove('fade'); $('msg').textContent=text; $('msg').style.color='var(--bad)';
+  shake('miss');
+  setTimeout(()=>showCard(text),600);
+}
+function showCard(why){
+  const nb=hits>best; if(nb) best=hits;
+  $('best').textContent=best;
+  $('cwhy').textContent=why;
+  $('cscore').textContent=hits; $('cbest').textContent=best;
+  $('cnote').textContent=nb&&hits>0?'New best!':'';
+  $('card').hidden=false;
+}
+function press(){
+  if(!running||resolved) return;
+  const p=(performance.now()-t0)/(dur*1000);
+  if(p>=zs&&p<=zs+zw) hit(); // marker keeps moving
+  else miss(p<zs?'Too early!':'Too late!');
+}
+function frame(){
+  if(running){
+    const p=(performance.now()-t0)/(dur*1000);
+    if(p>=1){ if(resolved) round(); else { $('cur').style.left='calc(100% - 4px)'; miss('Missed!'); } }
+    else $('cur').style.left='calc('+p*100+'% - 2px)';
+  }
+  requestAnimationFrame(frame);
+}
+function newGame(){ hits=0; $('hits').textContent='0'; $('msg').classList.remove('fade'); $('msg').textContent=''; round(); }
+$('bar').addEventListener('pointerdown',press);
+$('twist').addEventListener('pointerdown',e=>{e.preventDefault();press();});
+document.addEventListener('keydown',e=>{ if(e.code==='Space'&&!e.target.closest('#card')){e.preventDefault();press();} });
+$('again').onclick=()=>{ $('card').hidden=true; newGame(); };
+
+newGame(); frame();
+</script>
+</body>
+</html>
